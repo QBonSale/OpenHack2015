@@ -53,7 +53,8 @@ namespace WpfApplication1
             int result = -1;
             if (drawPile.Count==0) Environment.Exit(0);
             result = rnd.Next(0, drawPile.Count);
-            drawPile.Remove(result);
+            drawPile.RemoveAt(result);
+            InstructionLabel.Content = "A card is drawed";
             return result;
         }
 
@@ -99,7 +100,7 @@ namespace WpfApplication1
             return face;
         }
 
-        private void StartButton1_Click(object sender, RoutedEventArgs e)
+        private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             p1Cards.Add(dealCard(drawPile));
             p1Cards.Add(dealCard(drawPile));
@@ -114,6 +115,8 @@ namespace WpfApplication1
             p2Cards.Add(dealCard(drawPile));
 
             SuperButton.Content = "Declare";
+            InstructionLabel.Content = "Please select a combination to declare";
+
             updateCard(p1Cards);
 
         }
@@ -122,7 +125,7 @@ namespace WpfApplication1
 
         }
 
-        private void DeclareButton_Click(object sender, RoutedEventArgs e)
+        private void SuperButton_Click(object sender, RoutedEventArgs e)
         {
             if (superIndicator == 0)
             {
@@ -166,12 +169,14 @@ namespace WpfApplication1
                 if (success)
                 {
                     //exchange
-                    SuperButton.Content.Equals("Give");
+                    InstructionLabel.Content = "Hit! Please select a card to exchange.";
+                    SuperButton.Content = "Give";
                     superIndicator = 1;
                 }
                 else
                 {
-                    SuperButton.Content.Equals("Discard");
+                    InstructionLabel.Content = "No Hit! Please select a card to discard.";
+                    SuperButton.Content = "Discard";
                     superIndicator = 3;
                 }
             }
@@ -186,6 +191,9 @@ namespace WpfApplication1
                     p1Cards.Add(dealCard(drawPile));
                 }
                 updateCard(p1Cards);
+                SuperButton.Content = "Declare";
+                superIndicator = 0;
+                p2Turn();
             }
             else if (superIndicator ==2)
             {
@@ -198,10 +206,13 @@ namespace WpfApplication1
                     p1Cards.Add(dealCard(drawPile));
                 }
                 updateCard(p1Cards);
+                SuperButton.Content = "Declare";
+                superIndicator = 0;
             }
             else if (superIndicator==3)
             {
-                p1Cards.Remove(selectedCard);
+                p1Cards.RemoveAt(selectedCard);
+                updateCard(p1Cards);
                 p2Turn();
             }
         }
@@ -210,6 +221,7 @@ namespace WpfApplication1
         private void p2Turn()
         {
             SuperButton.Content = "Declare";
+            InstructionLabel.Content = "Enemy's turn";
             superIndicator = 0;
             if (p2Cards.Count == 4)
             {
@@ -253,17 +265,20 @@ namespace WpfApplication1
                     }
                 }
             }
-
+            InstructionLabel.Content += "\nEnemy declared a " + ((maskSel == 0) ? "Not Specified" : (maskSel == 1) ? "Spade" : (maskSel == 2) ? "Heart" : (maskSel == 3) ? "Club" : "Diamond") + "\n with a " +
+                ((numSel == 0) ? "Not Specified" : (numSel == 1) ? "A" : (numSel == 13) ? "K" : (numSel == 12) ? "Q" : (numSel == 11) ? "J" : numSel.ToString());
             if (success)
             {
                 //give
+                InstructionLabel.Content += "\nHit! Please select a card to exchange.";
                 SuperButton.Content = "Choose";
                 superIndicator = 2;
             }
             else
             {
                 //discard
-                p2Cards.Remove(rnd.Next(0,p2Cards.Count));
+                InstructionLabel.Content += "\nNoHit! Enemy select a card to discard .";
+                p2Cards.RemoveAt(rnd.Next(0,p2Cards.Count));
                 if (p1Cards.Count == 4)
                 {
                     p1Cards.Add(dealCard(drawPile));
@@ -281,29 +296,31 @@ namespace WpfApplication1
         private void Card1_Click(object sender, RoutedEventArgs e)
         {
             selectedCard = 0;
+            InstructionLabel.Content = "You just selected " + toFace((int)p1Cards[selectedCard]);
         }
 
         private void Card2_Click(object sender, RoutedEventArgs e)
         {
             selectedCard = 1;
+            InstructionLabel.Content = "You just selected " + toFace((int)p1Cards[selectedCard]);
         }
         private void Card3_Click(object sender, RoutedEventArgs e)
         {
             selectedCard = 2;
+            InstructionLabel.Content = "You just selected " + toFace((int)p1Cards[selectedCard]);
+
         }
         private void Card4_Click(object sender, RoutedEventArgs e)
         {
             selectedCard = 3;
+            InstructionLabel.Content = "You just selected " + toFace((int)p1Cards[selectedCard]);
+
         }
         private void Card5_Click(object sender, RoutedEventArgs e)
         {
             selectedCard = 4;
-        }
-
-        private void Card1_Copy_Click(object sender, RoutedEventArgs e)
-        {
+            InstructionLabel.Content = "You just selected " + toFace((int)p1Cards[selectedCard]);
 
         }
-
     }
 }
