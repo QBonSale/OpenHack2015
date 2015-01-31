@@ -52,21 +52,21 @@ namespace WpfApplication1
         {
             int result = -1;
             if (drawPile.Count==0) Environment.Exit(0);
-            result = rnd.Next(0, drawPile.Count);
-            drawPile.RemoveAt(result);
-            InstructionLabel.Content = "A card is drawed";
+            result = (int)drawPile[rnd.Next(0, drawPile.Count)];
+            drawPile.Remove(result);
+            InstructionLabel.Content += "\nA card is drawed";
             return result;
         }
 
-        private void updateCard(ArrayList cards)
+        private void updateCard()
         {
-            Card1.Content = toFace((int)cards[0]);
-            Card2.Content = toFace((int)cards[1]);
-            Card3.Content = toFace((int)cards[2]);
-            Card4.Content = toFace((int)cards[3]);
-            if (cards.Count > 4)
+            Card1.Content = toFace((int)p1Cards[0]);
+            Card2.Content = toFace((int)p1Cards[1]);
+            Card3.Content = toFace((int)p1Cards[2]);
+            Card4.Content = toFace((int)p1Cards[3]);
+            if (p1Cards.Count > 4)
             {
-                Card5.Content = toFace((int)cards[4]);
+                Card5.Content = toFace((int)p1Cards[4]);
             }
             else
             {
@@ -95,7 +95,7 @@ namespace WpfApplication1
                     face = cardNum.ToString();
                     break;
             }
-            int cardMask = cardNum % 4;
+            int cardMask = index % 4;
             face += (cardMask==0)?"s":(cardMask==1)?"h":(cardMask==2)?"c":"d";
             return face;
         }
@@ -115,9 +115,9 @@ namespace WpfApplication1
             p2Cards.Add(dealCard(drawPile));
 
             SuperButton.Content = "Declare";
-            InstructionLabel.Content = "Please select a combination to declare";
+            //InstructionLabel.Content = "Please select a combination to declare";
 
-            updateCard(p1Cards);
+            updateCard();
 
         }
         private void MaskCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -190,7 +190,7 @@ namespace WpfApplication1
                 {
                     p1Cards.Add(dealCard(drawPile));
                 }
-                updateCard(p1Cards);
+                updateCard();
                 SuperButton.Content = "Declare";
                 superIndicator = 0;
                 p2Turn();
@@ -205,14 +205,14 @@ namespace WpfApplication1
                 {
                     p1Cards.Add(dealCard(drawPile));
                 }
-                updateCard(p1Cards);
+                updateCard();
                 SuperButton.Content = "Declare";
                 superIndicator = 0;
             }
             else if (superIndicator==3)
             {
                 p1Cards.RemoveAt(selectedCard);
-                updateCard(p1Cards);
+                updateCard();
                 p2Turn();
             }
         }
@@ -283,7 +283,7 @@ namespace WpfApplication1
                 {
                     p1Cards.Add(dealCard(drawPile));
                 }
-                updateCard(p1Cards);
+                updateCard();
             }
 
         }
