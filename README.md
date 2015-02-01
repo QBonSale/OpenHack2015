@@ -1,3 +1,5 @@
 # OpenHack2015
 
-A Half-done prototype game
+A prototype WFC game with a demonstration-purpose AI.
+
+Maybe further extend to multiplayer
